@@ -7,13 +7,15 @@ $.fn.fancyZoom = function(options){
 
   if ($('#zoom').length == 0) {
     var ext = $.browser.msie ? 'gif' : 'png';
-    var html = '<div id="zoom-holder" style="position: absolute; width: 100%; left: 0; top: 0;"><div id="zoom" style="display:none; position: relative; margin: 0 auto; z-index: 150"> \
-                  <div id="zoom_content" style="background:#fff; width:100%; height:100%;"> \
-                  </div> \
-                  <a href="#" title="Close" id="zoom_close" style="position:absolute; bottom:0; right:0;"> \
-                    <img src="' + directory + '/closebox.' + ext + '" alt="Close" style="border:none; margin:0; padding:0;" /> \
-                  </a> \
-                </div></div>';
+    var html = '<div id="zoom-holder" style="position: absolute; width: 100%; left: 0; top: 0;"> \
+									<div id="zoom" style=" background:#fff; display:none; position: relative; margin: 0 auto; z-index: 150"> \
+                  	<div id="zoom_content" style="width: 100%; height: 100%"> \
+                  	</div> \
+                  	<a href="#" title="Close" id="zoom_close" style="position:absolute; bottom:0; right:0;"> \
+                    	<img src="' + directory + '/closebox.' + ext + '" alt="Close" style="border:none; margin:0; padding:0;" /> \
+                  	</a> \
+                	</div> \
+								</div>';
 
     $('body').append(html);
 
@@ -42,28 +44,8 @@ $.fn.fancyZoom = function(options){
     if (zooming) return false;
 		zooming         = true;
 		var content_div = $($(this).attr('href'));
-  	var zoom_width  = options.width;
-		var zoom_height = options.height;
-
-		var width       = window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth);
-  	var height      = window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
-  	var x           = window.pageXOffset || (window.document.documentElement.scrollLeft || window.document.body.scrollLeft);
-  	var y           = window.pageYOffset || (window.document.documentElement.scrollTop || window.document.body.scrollTop);
-  	var window_size = {'width':width, 'height':height, 'x':x, 'y':y}
-
-		var width              = (zoom_width || content_div.width()) + 60;
-		var height             = (zoom_height || content_div.height()) + 60;
-		var d                  = window_size;
-
-		// ensure that newTop is at least 0 so it doesn't hide close button
-		var newTop             = Math.max((d.height/2) - (height/2) + y, 0);
-		var newLeft            = (d.width/2) - (width/2);
-		var curTop             = e.pageY;
-		var curLeft            = e.pageX;
-
-		zoom_close.attr('curTop', curTop);
-		zoom_close.attr('curLeft', curLeft);
-		zoom_close.attr('scaleImg', options.scaleImg ? 'true' : 'false');
+		var width              = (options.width || content_div.width());
+		var height             = (options.height || content_div.height());
 
     $('#zoom').hide().css({
 			top				: '100px',
@@ -105,18 +87,16 @@ $.fn.fancyZoom = function(options){
 	
 	if (options.overlay) {
 		$('body').append('<div id="fancy-overlay" style="background:#000; display:none; filter:alpha(opacity=70); -moz-opacity: 0.7; opacity:0.7; position: absolute; margin: auto; top: 0;left: 0; z-index: 100; width:  100%; height: 100%;"></div>');
-		
-		}
-	
 		$('#fancy-overlay').fadeIn(125);
+	}
 		
     return false;
   }
 
   function hide() {
-	if (options.overlay) {
-		$('#fancy-overlay').fadeOut(125).remove();
-	};
+		if (options.overlay) {
+			$('#fancy-overlay').fadeOut(125).remove();
+		};
 	
     if (zooming) return false;
 		zooming         = true;
@@ -145,27 +125,5 @@ $.fn.fancyZoom = function(options){
     });
     return false;
   }
-
-// function switchBackgroundImagesTo(to) {
-//    $('#zoom_table td').each(function(i) {
-//   var bg = $(this).css('background-image').replace(/\.(png|gif|none)\"\)$/, '.' + to + '")');
-//      $(this).css('background-image', bg);
-//    });
-//    var close_img = zoom_close.children('img');
-//    var new_img = close_img.attr('src').replace(/\.(png|gif|none)$/, '.' + to);
-//    close_img.attr('src', new_img);
-//  }
-//
-//  function fixBackgroundsForIE() {
-//    if ($.browser.msie && parseFloat($.browser.version) >= 7) {
-//      switchBackgroundImagesTo('gif');
-//    }
-//	}
-//
-//  function unfixBackgroundsForIE() {
-//    if ($.browser.msie && $.browser.version >= 7) {
-//      switchBackgroundImagesTo('png');
-//    }
-//	}
 }
 })(jQuery);

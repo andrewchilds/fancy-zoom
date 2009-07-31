@@ -7,13 +7,13 @@ $.fn.fancyZoom = function(options){
 
   if ($('#zoom').length == 0) {
     var ext = $.browser.msie ? 'gif' : 'png';
-    var html = '<div id="zoom" style="display:none; z-index: 150"> \
+    var html = '<div id="zoom-holder" style="position: absolute; width: 100%; left: 0; top: 0;"><div id="zoom" style="display:none; position: relative; margin: 0 auto; z-index: 150"> \
                   <div id="zoom_content" style="background:#fff; width:100%; height:100%;"> \
                   </div> \
                   <a href="#" title="Close" id="zoom_close" style="position:absolute; bottom:0; right:0;"> \
                     <img src="' + directory + '/closebox.' + ext + '" alt="Close" style="border:none; margin:0; padding:0;" /> \
                   </a> \
-                </div>';
+                </div></div>';
 
     $('body').append(html);
 
@@ -66,9 +66,7 @@ $.fn.fancyZoom = function(options){
 		zoom_close.attr('scaleImg', options.scaleImg ? 'true' : 'false');
 
     $('#zoom').hide().css({
-			position	: 'absolute',
-			top				: curTop + 'px',
-			left			: curLeft + 'px',
+			top				: '100px',
 			width     : '1px',
 			height    : '1px'
 		});
@@ -89,8 +87,7 @@ $.fn.fancyZoom = function(options){
 		}
 
     $('#zoom').animate({
-      top     : newTop + 'px',
-      left    : newLeft + 'px',
+      top     : '100px',
       opacity : "show",
       width   : width,
       height  : height
@@ -118,7 +115,7 @@ $.fn.fancyZoom = function(options){
 
   function hide() {
 	if (options.overlay) {
-		$('#fancy-overlay').fadeOut(125);
+		$('#fancy-overlay').fadeOut(125).remove();
 	};
 	
     if (zooming) return false;
@@ -133,8 +130,7 @@ $.fn.fancyZoom = function(options){
 		}
 		zoom_close.hide();
 		$('#zoom').animate({
-      top     : zoom_close.attr('curTop') + 'px',
-      left    : zoom_close.attr('curLeft') + 'px',
+      top     : '100px',
       opacity : "hide",
       width   : '1px',
       height  : '1px'

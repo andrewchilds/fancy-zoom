@@ -7,7 +7,7 @@ $.fn.fancyZoom = function(options){
 
   if ($('#zoom').length == 0) {
     var ext = $.browser.msie ? 'gif' : 'png';
-    var html = '<div id="zoom" style="display:none;"> \
+    var html = '<div id="zoom" style="display:none; z-index: 150"> \
                   <table id="zoom_table" style="border-collapse:collapse; width:100%; height:100%;"> \
                     <tbody> \
                       <tr> \
@@ -121,10 +121,19 @@ $.fn.fancyZoom = function(options){
 			zoom_close.show();
 			zooming = false;
     })
+	
+	if (options.overlay) {
+		$('body').append('<div id="fancy-overlay" style="background:#000; opacity:0.8; position: absolute; margin: auto; top: 0;left: 0;z-index: 100; width:  100%; height: 100%;"></div>');
+	}
+	
     return false;
   }
 
   function hide() {
+	if (options.overlay) {
+		$('#fancy-overlay').remove();
+	};
+	
     if (zooming) return false;
 		zooming         = true;
 	  $('#zoom').unbind('click');

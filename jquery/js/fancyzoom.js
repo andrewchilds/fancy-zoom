@@ -6,20 +6,22 @@ $.fn.fancyZoom = function(options){
   var zooming   = false;
 
   if ($('#zoom').length == 0) {
-    var ext = $.browser.msie ? 'gif' : 'png';
     var html = '<div id="zoom-holder" style="position: absolute; width: 100%; left: 0; top: 0;"> \
-									<div id="zoom" style=" background:#fff; display:none; position: relative; margin: 0 auto; z-index: 150"> \
-                  	<div id="zoom_content" style="width: 100%; height: 100%"> \
-                  	</div> \
-                  	<a href="#" title="Close" id="zoom_close" style="position:absolute; bottom:0; right:0;"> \
-                    	<img src="' + directory + '/closebox.' + ext + '" alt="Close" style="border:none; margin:0; padding:0;" /> \
-                  	</a> \
+					<div id="zoom" style=" background:#fff; display:none; position: relative; margin: 0 auto; z-index: 150"> \
+	                  	<div id="zoom_content" style="width: 100%; height: 100%"> \
+	                  	</div> \
+	                  	<a href="#" title="Close" id="zoom_close" style="position:absolute; bottom:0; right:0;"> \
+	                    	<img src="' + directory + '/closebox.png" alt="Close" style="border:none; margin:0; padding:0;" /> \
+	                  	</a> \
                 	</div> \
-								</div>';
+				</div>';
 
     $('body').append(html);
-
-    $('html').click(function(e){if($(e.target).parents('#zoom:visible').length == 0) hide();});
+	
+	if (options.closeOnClick) {
+	    $('html').click(function(e){if($(e.target).parents('#zoom:visible').length == 0) hide();});
+	}
+	
     $(document).keyup(function(event){
         if (event.keyCode == 27 && $('#zoom:visible').length > 0) hide();
     });
@@ -28,10 +30,8 @@ $.fn.fancyZoom = function(options){
   }
 
   var zoom          = $('#zoom');
-  //var zoom_table    = $('#zoom_table');
   var zoom_close    = $('#zoom_close');
   var zoom_content  = $('#zoom_content');
-  //var middle_row    = $('td.ml,td.mm,td.mr');
 
   this.each(function(i) {
     $($(this).attr('href')).hide();
@@ -42,47 +42,41 @@ $.fn.fancyZoom = function(options){
 
   function show(e) {
     if (zooming) return false;
-		zooming         = true;
-		var content_div = $($(this).attr('href'));
-		var width              = (options.width || content_div.width());
-		var height             = (options.height || content_div.height());
+	zooming         	   = true;
+	var content_div 	   = $($(this).attr('href'));
+	var width              = (options.width || content_div.width());
+	var height             = (options.height || content_div.height());
 
     $('#zoom').hide().css({
-			top				: '100px',
-			width     : '1px',
-			height    : '1px'
-		});
+		top       : '100px',
+		width     : '1px',
+		height    : '1px'
+	});
 
-    //fixBackgroundsForIE();
-    
-		zoom_close.hide();
+	zoom_close.hide();
 
     if (options.closeOnClick) {
       $('#zoom').click(hide);
     }
 
-		if (options.scaleImg) {
-  		zoom_content.html(content_div.html());
-  		$('#zoom_content img').css('width', '100%');
-		} else {
-		  zoom_content.html('');
-		}
+	if (options.scaleImg) {
+ 		zoom_content.html(content_div.html());
+ 		$('#zoom_content img').css('width', '100%');
+	} else {
+	  zoom_content.html('');
+	}
 
     $('#zoom').animate({
-      top     : '100px',
-      opacity : "show",
-      width   : width,
-      height  : height
-    }, 250, null, function() {
-      if (options.scaleImg != true) {
-    		zoom_content.html(content_div.html());
-  		}
-			
-			//unfixBackgroundsForIE();
-			
-		
-			zoom_close.show();
-			zooming = false;
+	  top     : '100px',
+	  opacity : "show",
+	  width   : width,
+	  height  : height
+	}, 250, null, function() {
+    	if (options.scaleImg != true) {
+  			zoom_content.html(content_div.html());
+		}
+		zoom_close.show();
+		zooming = false;
     })
 	
 	if (options.overlay) {
@@ -94,22 +88,23 @@ $.fn.fancyZoom = function(options){
   }
 
   function hide() {
-		if (options.overlay) {
-			$('#fancy-overlay').fadeOut(125).remove();
-		};
+	if (options.overlay) {
+		$('#fancy-overlay').fadeOut(125).remove();
+	};
 	
     if (zooming) return false;
-		zooming         = true;
-	  
-		$('#zoom').unbind('click');
-		
-		//fixBackgroundsForIE();
-		
-		if (zoom_close.attr('scaleImg') != 'true') {
-  		zoom_content.html('');
-		}
-		zoom_close.hide();
-		$('#zoom').animate({
+	zooming         = true;
+  
+	$('#zoom').unbind('click');
+	
+
+	
+	if (zoom_close.attr('scaleImg') != 'true') {
+ 		zoom_content.html('');
+	}
+	
+	zoom_close.hide();
+	$('#zoom').animate({
       top     : '100px',
       opacity : "hide",
       width   : '1px',
@@ -118,10 +113,7 @@ $.fn.fancyZoom = function(options){
       if (zoom_close.attr('scaleImg') == 'true') {
     		zoom_content.html('');
   		}
-      
-			//unfixBackgroundsForIE();
-			
-			zooming = false;
+		zooming = false;
     });
     return false;
   }

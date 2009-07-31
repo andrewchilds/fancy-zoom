@@ -94,14 +94,14 @@ $.fn.fancyZoom = function(options){
       opacity : "show",
       width   : width,
       height  : height
-    }, 500, null, function() {
+    }, 250, null, function() {
       if (options.scaleImg != true) {
     		zoom_content.html(content_div.html());
   		}
 			
 			//unfixBackgroundsForIE();
 			
-			$('#fancy-overlay').fadeIn("slow");
+		
 			zoom_close.show();
 			zooming = false;
     })
@@ -111,12 +111,14 @@ $.fn.fancyZoom = function(options){
 		
 		}
 	
+		$('#fancy-overlay').fadeIn(125);
+		
     return false;
   }
 
   function hide() {
 	if (options.overlay) {
-		$('#fancy-overlay').fadeOut("slow");
+		$('#fancy-overlay').fadeOut(125);
 	};
 	
     if (zooming) return false;
@@ -136,7 +138,7 @@ $.fn.fancyZoom = function(options){
       opacity : "hide",
       width   : '1px',
       height  : '1px'
-    }, 500, null, function() {
+    }, 250, null, function() {
       if (zoom_close.attr('scaleImg') == 'true') {
     		zoom_content.html('');
   		}

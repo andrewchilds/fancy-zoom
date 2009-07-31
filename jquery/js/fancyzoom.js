@@ -123,7 +123,7 @@ $.fn.fancyZoom = function(options){
     })
 	
 	if (options.overlay) {
-		$('body').append('<div id="fancy-overlay" style="background:#000; opacity:0.8; position: absolute; margin: auto; top: 0;left: 0;z-index: 100; width:  100%; height: 100%;"></div>');
+		$('body').append('<div id="fancy-overlay" style="background:#000; filter:alpha(opacity=70); -moz-opacity: 0.7; opacity:0.7; position: absolute; margin: auto; top: 0;left: 0;z-index: 100; width:  100%; height: 100%;"></div>');
 	}
 	
     return false;

@@ -8,29 +8,9 @@ $.fn.fancyZoom = function(options){
   if ($('#zoom').length == 0) {
     var ext = $.browser.msie ? 'gif' : 'png';
     var html = '<div id="zoom" style="display:none; z-index: 150"> \
-                  <table id="zoom_table" style="border-collapse:collapse; width:100%; height:100%;"> \
-                    <tbody> \
-                      <tr> \
-                        <td class="tl" style="background:url(' + directory + '/tl.' + ext + ') 0 0 no-repeat; width:20px; height:20px; overflow:hidden;" /> \
-                        <td class="tm" style="background:url(' + directory + '/tm.' + ext + ') 0 0 repeat-x; height:20px; overflow:hidden;" /> \
-                        <td class="tr" style="background:url(' + directory + '/tr.' + ext + ') 100% 0 no-repeat; width:20px; height:20px; overflow:hidden;" /> \
-                      </tr> \
-                      <tr> \
-                        <td class="ml" style="background:url(' + directory + '/ml.' + ext + ') 0 0 repeat-y; width:20px; overflow:hidden;" /> \
-                        <td class="mm" style="background:#fff; vertical-align:top; padding:10px;"> \
-                          <div id="zoom_content"> \
-                          </div> \
-                        </td> \
-                        <td class="mr" style="background:url(' + directory + '/mr.' + ext + ') 100% 0 repeat-y;  width:20px; overflow:hidden;" /> \
-                      </tr> \
-                      <tr> \
-                        <td class="bl" style="background:url(' + directory + '/bl.' + ext + ') 0 100% no-repeat; width:20px; height:20px; overflow:hidden;" /> \
-                        <td class="bm" style="background:url(' + directory + '/bm.' + ext + ') 0 100% repeat-x; height:20px; overflow:hidden;" /> \
-                        <td class="br" style="background:url(' + directory + '/br.' + ext + ') 100% 100% no-repeat; width:20px; height:20px; overflow:hidden;" /> \
-                      </tr> \
-                    </tbody> \
-                  </table> \
-                  <a href="#" title="Close" id="zoom_close" style="position:absolute; top:0; left:0;"> \
+                  <div id="zoom_content" style="background:#fff; width:100%; height:100%;"> \
+                  </div> \
+                  <a href="#" title="Close" id="zoom_close" style="position:absolute; bottom:0; right:0;"> \
                     <img src="' + directory + '/closebox.' + ext + '" alt="Close" style="border:none; margin:0; padding:0;" /> \
                   </a> \
                 </div>';
@@ -46,10 +26,10 @@ $.fn.fancyZoom = function(options){
   }
 
   var zoom          = $('#zoom');
-  var zoom_table    = $('#zoom_table');
+  //var zoom_table    = $('#zoom_table');
   var zoom_close    = $('#zoom_close');
   var zoom_content  = $('#zoom_content');
-  var middle_row    = $('td.ml,td.mm,td.mr');
+  //var middle_row    = $('td.ml,td.mm,td.mr');
 
   this.each(function(i) {
     $($(this).attr('href')).hide();
@@ -93,8 +73,9 @@ $.fn.fancyZoom = function(options){
 			height    : '1px'
 		});
 
-    fixBackgroundsForIE();
-    zoom_close.hide();
+    //fixBackgroundsForIE();
+    
+		zoom_close.hide();
 
     if (options.closeOnClick) {
       $('#zoom').click(hide);
@@ -117,27 +98,34 @@ $.fn.fancyZoom = function(options){
       if (options.scaleImg != true) {
     		zoom_content.html(content_div.html());
   		}
-			unfixBackgroundsForIE();
+			
+			//unfixBackgroundsForIE();
+			
+			$('#fancy-overlay').fadeIn("slow");
 			zoom_close.show();
 			zooming = false;
     })
 	
 	if (options.overlay) {
-		$('body').append('<div id="fancy-overlay" style="background:#000; filter:alpha(opacity=70); -moz-opacity: 0.7; opacity:0.7; position: absolute; margin: auto; top: 0;left: 0;z-index: 100; width:  100%; height: 100%;"></div>');
-	}
+		$('body').append('<div id="fancy-overlay" style="background:#000; display:none; filter:alpha(opacity=70); -moz-opacity: 0.7; opacity:0.7; position: absolute; margin: auto; top: 0;left: 0; z-index: 100; width:  100%; height: 100%;"></div>');
+		
+		}
 	
     return false;
   }
 
   function hide() {
 	if (options.overlay) {
-		$('#fancy-overlay').remove();
+		$('#fancy-overlay').fadeOut("slow");
 	};
 	
     if (zooming) return false;
 		zooming         = true;
-	  $('#zoom').unbind('click');
-		fixBackgroundsForIE();
+	  
+		$('#zoom').unbind('click');
+		
+		//fixBackgroundsForIE();
+		
 		if (zoom_close.attr('scaleImg') != 'true') {
   		zoom_content.html('');
 		}
@@ -152,32 +140,34 @@ $.fn.fancyZoom = function(options){
       if (zoom_close.attr('scaleImg') == 'true') {
     		zoom_content.html('');
   		}
-      unfixBackgroundsForIE();
+      
+			//unfixBackgroundsForIE();
+			
 			zooming = false;
     });
     return false;
   }
 
-  function switchBackgroundImagesTo(to) {
-    $('#zoom_table td').each(function(i) {
-      var bg = $(this).css('background-image').replace(/\.(png|gif|none)\"\)$/, '.' + to + '")');
-      $(this).css('background-image', bg);
-    });
-    var close_img = zoom_close.children('img');
-    var new_img = close_img.attr('src').replace(/\.(png|gif|none)$/, '.' + to);
-    close_img.attr('src', new_img);
-  }
-
-  function fixBackgroundsForIE() {
-    if ($.browser.msie && parseFloat($.browser.version) >= 7) {
-      switchBackgroundImagesTo('gif');
-    }
-	}
-
-  function unfixBackgroundsForIE() {
-    if ($.browser.msie && $.browser.version >= 7) {
-      switchBackgroundImagesTo('png');
-    }
-	}
+// function switchBackgroundImagesTo(to) {
+//    $('#zoom_table td').each(function(i) {
+//   var bg = $(this).css('background-image').replace(/\.(png|gif|none)\"\)$/, '.' + to + '")');
+//      $(this).css('background-image', bg);
+//    });
+//    var close_img = zoom_close.children('img');
+//    var new_img = close_img.attr('src').replace(/\.(png|gif|none)$/, '.' + to);
+//    close_img.attr('src', new_img);
+//  }
+//
+//  function fixBackgroundsForIE() {
+//    if ($.browser.msie && parseFloat($.browser.version) >= 7) {
+//      switchBackgroundImagesTo('gif');
+//    }
+//	}
+//
+//  function unfixBackgroundsForIE() {
+//    if ($.browser.msie && $.browser.version >= 7) {
+//      switchBackgroundImagesTo('png');
+//    }
+//	}
 }
 })(jQuery);

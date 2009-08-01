@@ -6,15 +6,14 @@ $.fn.fancyZoom = function(options){
   var zooming   = false;
 
   if ($('#zoom').length == 0) {
-    var html = '<div id="zoom-holder" style="position: absolute; width: 100%; left: 0; top: 0;"> \
-					<div id="zoom" style=" background:#fff; display:none; position: relative; margin: 0 auto; z-index: 150"> \
-	                  	<div id="zoom_content" style="width: 100%; height: 100%"> \
-	                  	</div> \
-	                  	<a href="#" title="Close" id="zoom_close" style="position:absolute; bottom:0; right:0;"> \
-	                    	<img src="' + directory + '/closebox.png" alt="Close" style="border:none; margin:0; padding:0;" /> \
-	                  	</a> \
+    var html = '<div id="zoom-container"> \
+									<div id="zoom"> \
+	                  <div id="zoom-content"></div> \
+	                  <a href="#" title="click to cancel" id="zoom-cancel"> \
+	                  	<img src="' + directory + '/closebox.png" alt="cancel button" /> \
+	                  </a> \
                 	</div> \
-				</div>';
+								</div>';
 
     $('body').append(html);
 	
@@ -26,12 +25,12 @@ $.fn.fancyZoom = function(options){
         if (event.keyCode == 27 && $('#zoom:visible').length > 0) hide();
     });
 
-    $('#zoom_close').click(hide);
+    $('#zoom-cancel').click(hide);
   }
 
   var zoom          = $('#zoom');
-  var zoom_close    = $('#zoom_close');
-  var zoom_content  = $('#zoom_content');
+  var zoom_cancel    = $('#zoom-cancel');
+  var zoom_content  = $('#zoom-content');
 
   this.each(function(i) {
     $($(this).attr('href')).hide();
@@ -53,7 +52,9 @@ $.fn.fancyZoom = function(options){
 		height    : '1px'
 	});
 
-	zoom_close.hide();
+		//$('#zoom-content').css({width:width, height: height});
+		
+	zoom_cancel.hide();
 
     if (options.closeOnClick) {
       $('#zoom').click(hide);
@@ -61,7 +62,7 @@ $.fn.fancyZoom = function(options){
 
 	if (options.scaleImg) {
  		zoom_content.html(content_div.html());
- 		$('#zoom_content img').css('width', '100%');
+ 		$('#zoom-content img').css('width', '100%');
 	} else {
 	  zoom_content.html('');
 	}
@@ -75,13 +76,13 @@ $.fn.fancyZoom = function(options){
     	if (options.scaleImg != true) {
   			zoom_content.html(content_div.html());
 		}
-		zoom_close.show();
+		zoom_cancel.show();
 		zooming = false;
     })
 	
 	if (options.overlay) {
-		$('body').append('<div id="fancy-overlay" style="background:#000; display:none; filter:alpha(opacity=70); -moz-opacity: 0.7; opacity:0.7; position: absolute; margin: auto; top: 0;left: 0; z-index: 100; width:  100%; height: 100%;"></div>');
-		$('#fancy-overlay').fadeIn(125);
+		$('body').append('<div id="zoom-overlay"></div>');
+		$('#zoom-overlay').fadeIn(125);
 	}
 		
     return false;
@@ -89,7 +90,7 @@ $.fn.fancyZoom = function(options){
 
   function hide() {
 	if (options.overlay) {
-		$('#fancy-overlay').fadeOut(125).remove();
+		$('#zoom-overlay').fadeOut(125).remove();
 	};
 	
     if (zooming) return false;
@@ -99,18 +100,18 @@ $.fn.fancyZoom = function(options){
 	
 
 	
-	if (zoom_close.attr('scaleImg') != 'true') {
+	if (zoom_cancel.attr('scaleImg') != 'true') {
  		zoom_content.html('');
 	}
 	
-	zoom_close.hide();
+	zoom_cancel.hide();
 	$('#zoom').animate({
       top     : '100px',
       opacity : "hide",
       width   : '1px',
       height  : '1px'
     }, 250, null, function() {
-      if (zoom_close.attr('scaleImg') == 'true') {
+      if (zoom_cancel.attr('scaleImg') == 'true') {
     		zoom_content.html('');
   		}
 		zooming = false;

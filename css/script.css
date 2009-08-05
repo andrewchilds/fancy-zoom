@@ -1,0 +1,86 @@
+@charset "UTF-8";
+/* 
+
+Title: Inventables - script.css 
+Description: This stylesheet contains custom/general styles for sitewide javascript plugins (see index)
+
+Index:	
+				(~) jQuery fancyZoom styles
+				(!) 
+				(@) 
+				(#) 
+				($)
+				(%)
+				(^)
+				
+Author: wwhited@inventables.com
+Copyright: 2009 Inventables, inc. All rights reserved
+
+*/
+
+/*---- (~) jQuery fancyZoom styles ----*/
+
+div#zoom-overlay{
+
+	background:#000; 
+	display:none;
+	opacity:0.7; 
+	-moz-opacity: 0.7; 
+	filter:alpha(opacity=70); 
+	position: absolute;
+	top: 0;
+	left: 0; 
+	width:  100%; 
+	height: 100%;
+	z-index: 100; 
+	
+}
+
+div#zoom-container{
+	
+	position: absolute; 
+	left: 0; 
+	top: 0;
+	width: 100%;
+	
+}
+
+div#zoom{
+	
+	 background:#fff;
+	 display:none; 
+	 margin: 0 auto;
+	 position: relative; 
+	 z-index: 150;
+	
+}
+
+div#zoom-content{
+	
+	padding:25px;
+	
+}
+
+div#zoom-content:after{
+	content:".";
+	display:block;
+	height:0;
+	clear:both;
+	visibility:hidden;
+}
+
+div#zoom a#zoom-cancel{
+	
+	position:absolute; 
+	bottom:0; 
+	right:0;
+	
+}
+
+div#zoom a#zoom-cancel img{
+	
+	border:none; 
+	margin:0; 
+	padding:0;
+	
+}

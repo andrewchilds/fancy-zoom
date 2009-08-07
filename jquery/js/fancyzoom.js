@@ -10,7 +10,7 @@
 										<div id="zoom"> \
 		                  <div id="zoom-content"></div> \
 		                  <a href="#" title="click to cancel" id="zoom-cancel"> \
-		                  	<img src="' + directory + '/closebox.png" alt="cancel button" /> \
+		                  	cancel \
 		                  </a> \
 	                	</div> \
 									</div>';
@@ -21,15 +21,18 @@
 		    $('html').click(function(e){if($(e.target).parents('#zoom:visible').length == 0) hide();});
 			}
 	
-	    $(document).keyup(function(event){
-		    if (event.keyCode == 27 && $('#zoom:visible').length > 0) hide();
-	    });
+	    
+			if (!options.ignoreEscape) {
+				$(document).keyup(function(event){
+			    if (event.keyCode == 27 && $('#zoom:visible').length > 0) hide();
+		    });
+			}
 
 	    $('#zoom-cancel').click(hide);
 	  }
 
 	  var zoom          = $('#zoom');
-	  var zoom_cancel    = $('#zoom-cancel');
+	  var zoom_cancel   = $('#zoom-cancel');
 	  var zoom_content  = $('#zoom-content');
 
 	  this.each(function(i) {
@@ -42,7 +45,7 @@
 	  function show(e) {
 	    if (zooming) return false;
 			zooming         	   	 = true;
-			content_div				 = $($(this).attr('href'));
+			var content_div				 = $($(this).attr('href'));
 			active_content_prev = content_div.prev();
 
 			var width              = (options.width || content_div.width());
@@ -61,8 +64,7 @@
 	    }
 
 			if (options.scaleImg) {
-				content_div.remove();
-		 		zoom_content.html(content_div.html());
+				content_div.appendTo(zoom_content).show();
 		 		$('#zoom-content img').css('width', '100%');
 			} else {
 			  zoom_content.html('');
@@ -75,8 +77,7 @@
 			  height  : height
 			}, 250, null, function() {
 	    	if (options.scaleImg != true) {
-					content_div.remove();
-	  			zoom_content.html(content_div.html());
+				  content_div.appendTo(zoom_content).show();
 				}
 				zoom_cancel.show();
 				zooming = false;
@@ -97,12 +98,12 @@
 	
 	    if (zooming) return false;
 			zooming         = true;
+			var content_div				 = $($('#zoom-content > *:first'));
   
 			$('#zoom').unbind('click');
 	
 			if (zoom_cancel.attr('scaleImg') != 'true') {
-		 		zoom_content.html('');
-				active_content_prev.after(content_div).next().hide();
+				content_div.hide().insertAfter(active_content_prev);
 			}
 	
 			zoom_cancel.hide();
@@ -113,8 +114,7 @@
 	      height  : '1px'
 	    }, 250, null, function() {
 	      if (zoom_cancel.attr('scaleImg') == 'true') {
-	    		zoom_content.html('');
-					active_content_prev.after(content_div).next().hide();
+					content_div.hide().insertAfter(active_content_prev);
 	  		}
 				zooming = false;
 	    });
